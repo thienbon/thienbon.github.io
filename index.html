@@ -52,15 +52,25 @@
 
       .ui-close-btn {
         font-family: monogram, monospace;
-        border-style: none;
+        border: none;
         border-radius: 3px;
-        padding: 1rem;
-        font-size: inherit;
+        padding: 0.8rem 1.5rem;
+        font-size: 1.2rem;
+        background-color: #f0f0f0;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .ui-close-btn:hover {
+        background-color: #e0e0e0;
+        transform: translateY(-2px);
       }
 
       .btn-container {
-        align-self: flex-end;
         margin-top: 1rem;
+        display: flex;
+        justify-content: center;
+        width: 100%;
       }
 
       .note {
@@ -71,10 +81,169 @@
         flex-direction: column;
         color: rgb(238, 238, 238);
       }
+
+      #welcome-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+      }
+
+      #welcome-box {
+        background: white;
+        border-radius: 3px;
+        padding: 2rem;
+        width: 90%;
+        max-width: 1000px;
+        text-align: left;
+      }
+
+      #welcome-content {
+        display: flex;
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+
+      #welcome-box .profile-section {
+        flex: 1;
+        max-width: 600px;
+      }
+
+      #welcome-box .profile-image {
+        width: 320px;
+        height: auto;
+        border-radius: 3px;
+        object-fit: contain;
+      }
+
+      #welcome-box h2 {
+        margin-top: 0;
+        color: #311047;
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
+      }
+
+      #welcome-box p {
+        margin: 0;
+        line-height: 1.6;
+        font-size: 1.1rem;
+        color: #333;
+      }
+
+      #welcome-box p:not(:last-child) {
+        margin-bottom: 1rem;
+      }
+
+      #nav-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+        margin: 1rem 0;
+      }
+
+      .nav-btn {
+        font-family: monogram, monospace;
+        border: 2px solid #311047;
+        border-radius: 3px;
+        padding: 0.8rem 1.5rem;
+        font-size: 1.2rem;
+        background-color: #311047;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s;
+        min-width: 150px;
+        text-align: center;
+      }
+
+      .nav-btn:hover {
+        background-color: #4a1a6b;
+      }
+
+      .buttons-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+      }
+
+      .menu-btn {
+        font-family: monogram, monospace;
+        border: none;
+        border-radius: 3px;
+        padding: 0.8rem 1.5rem;
+        font-size: 1.4rem;
+        background-color: #311047;
+        color: white;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: relative;
+        z-index: 10;
+      }
+
+      .menu-btn:hover {
+        background-color: #4a1a6b;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+      }
+
+      .menu-btn:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+
+      .menu-container {
+        position: absolute;
+        top: 1vh;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     </style>
     <div id="app">
       <div>
         <p class="note">Tap/Click around to move</p>
+        <div class="menu-container">
+          <button id="menu-btn" class="menu-btn">Quick Navigation</button>
+        </div>
+
+        <div id="welcome-container" style="display: none">
+          <div id="welcome-box">
+            <div id="welcome-content">
+              <div class="profile-section">
+                <h2>Welcome to My Portfolio!</h2>
+                <p>Hi, I'm Thien Vo 👋 You can call me Thien</p>
+                <p>I'm currently a Software Engineer 💻 based in Ho Chi Minh City, where I focus on building secure, reliable, and scalable systems.</p>
+                <p>My work centers around advancing software development with a strong emphasis on Security 🔒, Performance ⚡, and User Privacy 🛡️. I'm passionate about creating solutions that are not only efficient but also resilient against modern threats.</p>
+                <p>I've explored exciting areas such as Web Application Security, Secure Software Development Life Cycle (SSDLC), and Vulnerability Management. Additionally, I've worked on projects involving End-to-End Encryption, Secure Authentication, and Threat Modeling. I'm always eager to deepen my expertise, stay updated with the latest security trends, and take on new challenges in the evolving tech landscape!</p>
+              </div>
+              <img src="ThienVo.png" alt="Thien Vo" class="profile-image">
+            </div>
+            <div class="buttons-container">
+              <div id="nav-buttons">
+                <button class="nav-btn" data-target="pc">PC & Skills</button>
+                <button class="nav-btn" data-target="cs-degree">Education</button>
+                <button class="nav-btn" data-target="projects">Projects</button>
+                <button class="nav-btn" data-target="resume">Contact</button>
+              </div>
+              <div class="btn-container">
+                <button id="close-welcome" class="ui-close-btn">Start Exploring</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div id="textbox-container" style="display: none">
           <div id="textbox">

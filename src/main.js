@@ -42,6 +42,8 @@ k.scene("main", async () => {
     "player",
   ]);
 
+  const boundaryPositions = {};
+
   for (const layer of layers) {
     if (layer.name === "boundaries") {
       for (const boundary of layer.objects) {
@@ -55,6 +57,11 @@ k.scene("main", async () => {
         ]);
 
         if (boundary.name) {
+          boundaryPositions[boundary.name] = {
+            x: boundary.x,
+            y: boundary.y
+          };
+
           player.onCollide(boundary.name, () => {
             player.isInDialogue = true;
             displayDialogue(
@@ -64,7 +71,6 @@ k.scene("main", async () => {
           });
         }
       }
-
       continue;
     }
 
@@ -72,8 +78,8 @@ k.scene("main", async () => {
       for (const entity of layer.objects) {
         if (entity.name === "player") {
           player.pos = k.vec2(
-            (map.pos.x + entity.x) * scaleFactor,
-            (map.pos.y + entity.y) * scaleFactor
+            entity.x * scaleFactor,
+            entity.y * scaleFactor
           );
           k.add(player);
           continue;
@@ -90,6 +96,60 @@ k.scene("main", async () => {
 
   k.onUpdate(() => {
     k.camPos(player.worldPos().x, player.worldPos().y - 100);
+  });
+
+  // Show welcome message
+  const welcomeContainer = document.getElementById("welcome-container");
+  const menuBtn = document.getElementById("menu-btn");
+  
+  const showWelcomeMessage = () => {
+    welcomeContainer.style.display = "flex";
+  };
+
+  const hideWelcomeMessage = () => {
+    welcomeContainer.style.display = "none";
+  };
+
+  // Show welcome message on game start
+  showWelcomeMessage();
+
+  // Handle menu button
+  menuBtn.addEventListener("click", () => {
+    if (welcomeContainer.style.display === "none") {
+      showWelcomeMessage();
+    } else {
+      hideWelcomeMessage();
+    }
+  });
+
+  // Handle navigation
+  const handleNavigation = (target) => {
+    if (boundaryPositions[target]) {
+      const targetPos = boundaryPositions[target];
+      // Position the player slightly in front of the target
+      const offsetY = 20; // Offset to position player in front of objects
+      player.pos = k.vec2(
+        targetPos.x * scaleFactor,
+        (targetPos.y + offsetY) * scaleFactor
+      );
+      player.isInDialogue = true;
+      displayDialogue(
+        dialogueData[target],
+        () => (player.isInDialogue = false)
+      );
+    }
+  };
+
+  // Close welcome message
+  document.getElementById("close-welcome").addEventListener("click", hideWelcomeMessage);
+
+  // Navigation buttons
+  document.querySelectorAll(".nav-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.target;
+      handleNavigation(target);
+      hideWelcomeMessage();
+    });
   });
 
   k.onMouseDown((mouseBtn) => {
@@ -156,6 +216,7 @@ k.scene("main", async () => {
   k.onKeyRelease(() => {
     stopAnims();
   });
+
   k.onKeyDown((key) => {
     const keyMap = [
       k.isKeyDown("right"),
